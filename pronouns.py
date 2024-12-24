@@ -1,13 +1,9 @@
 import json
 from os import path
 
-from shutil import copyfile
-
-from typing import Dict, List, Any
-
 CLANGEN_MACOS_PATH='/Users/rusty/Library/Application Support/ClanGen/saves/'
 
-PRONOUNS: Dict[str, Dict[str, str]] = {
+PRONOUNS = {
     'male': {
         'subject': 'he',
         'object': 'him',
@@ -39,7 +35,10 @@ PRONOUNS['trans male'] = PRONOUNS['male']
 
 while True:
 
-    clan_name = input('Enter a Clan name (leave blank to quit): ')
+    try:
+        clan_name = input('Enter a Clan name (leave blank to quit): ')
+    except KeyboardInterrupt:
+        print('Ctrl-C detected, exiting')
 
     print(CLANGEN_MACOS_PATH + clan_name)
 
@@ -50,7 +49,7 @@ while True:
         print('Clan could not be found. Please enter another name.')
         continue
 
-    clan_cats: List[Dict[str, Any]] = json.load(open(CLANGEN_MACOS_PATH + clan_name + '/clan_cats.json'))
+    clan_cats = json.load(open(CLANGEN_MACOS_PATH + clan_name + '/clan_cats.json'))
 
     for cat in clan_cats:
         cat['pronouns'] = [PRONOUNS[cat['gender_align']]]
