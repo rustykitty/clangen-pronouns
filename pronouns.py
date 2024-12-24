@@ -1,6 +1,8 @@
 import json
 from os import path
 
+from shutil import copyfile
+
 CLANGEN_MACOS_PATH='/Users/rusty/Library/Application Support/ClanGen/saves/'
 
 PRONOUNS = {
@@ -39,19 +41,25 @@ while True:
         clan_name = input('Enter a Clan name (leave blank to quit): ')
     except KeyboardInterrupt:
         print('Ctrl-C detected, exiting')
+        break
 
-    print(CLANGEN_MACOS_PATH + clan_name)
+    clan_path = CLANGEN_MACOS_PATH + clan_name
+
+    print(clan_path)
 
     if not clan_name:
         print('Exiting')
         break
-    if not path.exists(CLANGEN_MACOS_PATH + clan_name):
+    if not path.exists(clan_path):
         print('Clan could not be found. Please enter another name.')
         continue
 
-    clan_cats = json.load(open(CLANGEN_MACOS_PATH + clan_name + '/clan_cats.json'))
+    copyfile(clan_path + '/clan_cats.json', 
+             clan_path + '/clan_cats_backup.json')
+
+    clan_cats = json.load(open(clan_path + '/clan_cats.json'))
 
     for cat in clan_cats:
         cat['pronouns'] = [PRONOUNS[cat['gender_align']]]
 
-    json.dump(clan_cats, open(CLANGEN_MACOS_PATH + clan_name + '/clan_cats_new.json', 'w'), indent=4)
+    json.dump(clan_cats, open(clan_path + '/clan_cats.json', 'w'), indent=4)
