@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "clangen-pronouns"
+version = "0.1.0"
+description = "Script for ClanGen"
+authors = ["Rusty <rusty3925@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.8,<3.13"
+platformdirs = "^3.3.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

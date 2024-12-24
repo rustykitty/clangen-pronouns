@@ -3,7 +3,18 @@ from os import path
 
 from shutil import copyfile
 
-CLANGEN_MACOS_PATH='/Users/rusty/Library/Application Support/ClanGen/saves/'
+from platformdirs import user_data_dir
+
+CLANGEN_PATH: str = None
+
+dev = input('Type `dev` (without quotes) to convert saves on development, or paste in a path if running from source (leave blank for stable): ')
+
+if dev == 'dev':
+    CLANGEN_PATH = user_data_dir("ClanGenBeta", "ClanGen")
+elif not dev:
+    CLANGEN_PATH = user_data_dir("ClanGen", "ClanGen")
+else:
+    CLANGEN_PATH = dev
 
 PRONOUNS = {
     'male': {
@@ -36,14 +47,13 @@ PRONOUNS['trans female'] = PRONOUNS['female']
 PRONOUNS['trans male'] = PRONOUNS['male']
 
 while True:
-
     try:
         clan_name = input('Enter a Clan name (leave blank to quit): ')
     except KeyboardInterrupt:
         print('Ctrl-C detected, exiting')
         break
 
-    clan_path = CLANGEN_MACOS_PATH + clan_name
+    clan_path = f"{CLANGEN_PATH}/saves/{clan_name}"
 
     print(clan_path)
 
@@ -63,3 +73,6 @@ while True:
         cat['pronouns'] = [PRONOUNS[cat['gender_align']]]
 
     json.dump(clan_cats, open(clan_path + '/clan_cats.json', 'w'), indent=4)
+
+
+    print('Conversion successful')
